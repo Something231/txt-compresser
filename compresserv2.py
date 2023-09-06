@@ -1,7 +1,7 @@
 import json
 with open('input.txt') as f:
     lines = f.read()
-
+    
 lines = lines.replace("0", "$0")
 lines = lines.replace("1", "$1")
 lines = lines.replace("2", "$2")
@@ -13,11 +13,34 @@ lines = lines.replace("7", "$7")
 lines = lines.replace("8", "$8")
 lines = lines.replace("9", "$9")
 
-words = lines.split()
 freg = ""
+while "  " in lines:
+    lines = lines.replace("  ", "##")
+
+
+
+i = 0
+while i < len(lines):
+    if lines[i] == '#':
+        count = 1
+        i += 1
+        while i < len(lines) and lines[i] == '#':
+            count += 1
+            i += 1
+        count -= 1
+        freg += f"#{count} "
+    else:
+        freg += lines[i]
+        i += 1
+
+freg = freg.replace("\n", " 1 ")
+
+words = freg.split()
 
 with open("wordlist.json", 'r') as json_file:
     dic = json.load(json_file)
+
+freg = ""
 
 for word in words:
     if word in dic:
